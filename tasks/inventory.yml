@@ -1,0 +1,24 @@
+---
+- name: Lab Inventory
+  tower_inventory: 
+    name: Lab Inventory
+    organization: Default
+    state: present
+
+- name: Import Lab Inventory
+  shell: "awx-manage inventory_import --source /home/student1/lab_inventory/hosts --inventory-name='Lab Inventory' --group-filter web"
+  delegate_to: tower
+  become: yes
+
+- name: Remove Lab Vars
+  tower_inventory: 
+    name: Lab Inventory
+    organization: Default
+    state: present
+    variables: ''
+
+- name: Remove Demo Inventory
+  tower_inventory:
+    name: Demo Inventory
+    organization: Default
+    state: absent

@@ -1,0 +1,182 @@
+---
+- name: Fact Scan - Job Template
+  tower_job_template:
+    name: SERVER / Fact Scan
+    job_type: run
+    ask_inventory: yes
+    ask_credential: yes
+    project: Fact Scan
+    playbook: scan_facts.yml
+    fact_caching_enabled: yes
+    state: present
+
+- name: Config Management - Job Template
+  tower_job_template:
+    name: SERVER / Config Management
+    job_type: run
+    ask_inventory: yes
+    ask_credential: yes
+    project: Ansible Linux
+    playbook: config_mgmt.yml
+    state: present
+    survey_enabled: yes
+    survey_spec:
+      name: ''
+      description: ''
+      spec:
+      - question_name: 'Enter host to configure'
+        type: text
+        variable: HOSTS
+        required: false
+
+- name: Hardening - Job Template
+  tower_job_template:
+    name: SERVER / Hardening
+    job_type: run
+    ask_inventory: yes
+    ask_credential: yes
+    project: Ansible Linux
+    playbook: hardening.yml
+    skip_tags: accounts_passwords_pam_faillock_deny
+    state: present
+    survey_enabled: yes
+    survey_spec:
+      name: ''
+      description: ''
+      spec:
+      - question_name: 'Enter host to configure'
+        type: text
+        variable: HOSTS
+        required: false
+      - question_name: Configure Firewall?
+        type: multiplechoice
+        variable: harden_firewall
+        required: false
+        choices:
+          - 'Yes'
+          - 'No'
+      - question_name: Configure Time?
+        type: multiplechoice
+        variable: harden_time
+        required: false
+        choices:
+          - 'Yes'
+          - 'No'
+      - question_name: Harden SSH?
+        type: multiplechoice
+        variable: harden_ssh
+        required: false
+        choices:
+          - 'Yes'
+          - 'No'
+      - question_name: PCI Baseline?
+        type: multiplechoice
+        variable: harden_pci
+        required: false
+        choices:
+          - 'Yes'
+          - 'No'
+
+- name: Grant Sudo - Job Template
+  tower_job_template:
+    name: SERVER / Grant Sudo
+    job_type: run
+    ask_inventory: yes
+    ask_credential: yes
+    project: Ansible Linux
+    playbook: grant_sudo.yml
+    state: present
+    survey_enabled: yes
+    survey_spec:
+      name: ''
+      description: ''
+      spec:
+      - question_name: 'Enter host to configure'
+        type: text
+        variable: HOSTS
+        required: false
+      - question_name: Username
+        type: text
+        variable: sudo_user
+        required: true
+      - question_name: Time
+        type: integer
+        variable: sudo_count
+        required: true
+        default: 10
+      - question_name: Units
+        type: multiplechoice
+        variable: harden_ssh
+        required: true
+        choices:
+          - 'minutes'
+          - 'hours'
+          - 'days'
+        default: minutes
+      - question_name: Remove Access After Time Limit?
+        type: multiplechoice
+        variable: sudo_cleanup
+        required: false
+        choices:
+          - 'True'
+          - 'False'
+        default: 'True'
+
+- name: Debug Info - Job Template
+  tower_job_template:
+    name: SERVER / Gather Debug Info
+    job_type: run
+    ask_inventory: yes
+    ask_credential: yes
+    project: Ansible Linux
+    playbook: gather_debug_info.yml
+    state: present
+    survey_enabled: yes
+    survey_spec:
+      name: ''
+      description: ''
+      spec:
+      - question_name: 'Enter host to configure'
+        type: text
+        variable: HOSTS
+        required: false
+
+- name: Patching - Job Template
+  tower_job_template:
+    name: SERVER / Patching
+    job_type: run
+    ask_inventory: yes
+    ask_credential: yes
+    project: Ansible Linux
+    playbook: patching.yml
+    state: present
+    job_tags: all
+    survey_enabled: yes
+    survey_spec:
+      name: ''
+      description: ''
+      spec:
+      - question_name: 'Enter host to configure'
+        type: text
+        variable: HOSTS
+        required: false
+  
+- name: Security Patching - Job Template
+  tower_job_template:
+    name: SERVER / Security Patching
+    job_type: run
+    ask_inventory: yes
+    ask_credential: yes
+    project: Ansible Linux
+    playbook: patching.yml
+    state: present
+    job_tags: security
+    survey_enabled: yes
+    survey_spec:
+      name: ''
+      description: ''
+      spec:
+      - question_name: 'Enter host to configure'
+        type: text
+        variable: HOSTS
+        required: false

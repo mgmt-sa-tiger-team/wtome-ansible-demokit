@@ -1,0 +1,1 @@
+tower ansible_host=ip ansible_user=user ansible_password=pass

@@ -1,0 +1,23 @@
+---
+- name: Ansible Linux - Project
+  tower_project:
+    name: "Ansible Linux"
+    scm_type: git
+    scm_update_on_launch: yes
+    scm_url: https://github.com/willtome/ansible-linux.git
+    validate_certs: no
+    state: present
+
+- name: Fact Scan - Project
+  tower_project:
+    name: "Fact Scan"
+    scm_type: git
+    scm_update_on_launch: yes
+    scm_url: https://github.com/ansible/awx-facts-playbooks.git
+    validate_certs: no
+    state: present
+
+- name: Remove Demo Project
+  tower_project:
+    name: Demo Project
+    state: absent

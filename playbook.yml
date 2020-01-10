@@ -1,0 +1,14 @@
+---
+- hosts: localhost
+  gather_facts: no
+  vars_files: vars.yml
+
+  tasks:
+  - shell: tower-cli config verify_ssl False
+  - shell: "tower-cli config host {{ hostvars['tower']['ansible_host'] }}"
+  - shell: "tower-cli login --password {{ hostvars['tower']['ansible_password'] }} admin"
+  - include_tasks: ./tasks/projects.yml
+  - include_tasks: ./tasks/credentials.yml
+  - include_tasks: ./tasks/inventory.yml
+  - include_tasks: ./tasks/jobs.yml
+
