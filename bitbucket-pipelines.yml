@@ -1,0 +1,10 @@
+pipelines:
+  branches:
+    master:
+      - step:
+          script:
+            - git remote add github git@github.com:willtome/ansible-demokit.git
+            - git remote add tigerteam git@github.com:mgmt-sa-tiger-team/wtome-ansible-demokit.git
+            - git config user.name "willtome"
+            - git push -f github master
+            - git push -f tigerteam master
